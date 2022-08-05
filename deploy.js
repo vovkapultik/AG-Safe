@@ -1,6 +1,7 @@
-const { Connection, LAMPORTS_PER_SOL, Keypair } = require('@solana/web3.js');
+const { Connection, LAMPORTS_PER_SOL, Keypair, Transaction, SystemProgram, sendAndConfirmTransaction, Signer } = require('@solana/web3.js');
 const { Contract, Program } = require('@solana/solidity');
 const { readFileSync } = require('fs');
+const { Sign } = require('crypto');
 
 const FLIPPER_ABI = JSON.parse(readFileSync('build/AGSafebox.abi', 'utf8'));
 const PROGRAM_SO = readFileSync('build/bundle.so');
@@ -22,19 +23,9 @@ const PROGRAM_SO = readFileSync('build/bundle.so');
 
     await contract.load(program, PROGRAM_SO);
 
-    console.log('Program deployment finished, deploying the flipper contract ...');
+    console.log('Program deployment finished, deploying the contract ...');
 
     await contract.deploy('AGSafebox', [], storage, 4096);
 
-    await contract.functions.deposit();
-    //todo: send SOLs 
-
-    //const res4 = await contract.functions.getBalance();
-    //console.log('state: ' + res4.result);
-
-    //await contract.functions.deposit(1000);
-
-    //const res6 = await contract.functions.getBalance();
-    //console.log('state: ' + res6.result);
-
+    console.log(program.publicKey.toString());
 })();
